@@ -99,7 +99,12 @@ class Device(object):
         buf[1] = 2
         buf[2] = 66                 # indicating a set request
         buf[3] = c.REGIONS[region]
-        buf[4] = c.COLORS[color]
+        if isinstance(color, int):
+            buf[4] = color
+        elif isinstance(color, str):
+            buf[4] = c.COLORS[color]
+        else:
+            raise TypeError("color should of type <int> or <str> and not " + type(color))
         buf[5] = c.LEVELS[level]
         buf[6] = 0
         buf[7] = 236                # EOR (end of request)

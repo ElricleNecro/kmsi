@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
+import argparse as ag
+
+from kmsi import hid as h
+
+
+def parse_args():
+    parser = ag.ArgumentParser(
+        formatter_class=ag.ArgumentDefaultsHelpFormatter,
+    )
+    # parser.add_argument(
+        # "Directory",
+        # nargs='?',
+        # help="Répertoire contenant les images à mettre en fond d'écran."
+    # )
+    parser.add_argument(
+        "--vendor-id",
+        type=int,
+        help="Vendor id.",
+        default=6000
+    )
+    parser.add_argument(
+        "--product-id",
+        type=int,
+        help="Product id",
+        default=65280
+    )
+    parser.add_argument(
+        "--color",
+        type=str,
+        help="Color to use.",
+        default="red"
+    )
+    parser.add_argument(
+        "--region",
+        type=str,
+        help="Region to set.",
+        default="left"
+    )
+    parser.add_argument(
+        "--level",
+        type=str,
+        help="Intensity level.",
+        default='high'
+    )
+    parser.add_argument(
+        "--mode",
+        type=str,
+        help="Working mode for the keyboard.",
+        default='normal'
+    )
+
+    return parser.parse_args()
+
+def main(args):
+    config = dict(
+        mode="normal",
+        left=dict(
+            color="red",
+            level="high",
+        ),
+        middle=dict(
+            color="sky",
+            level="high",
+        ),
+        right=dict(
+            color="purple",
+            level="high",
+        )
+    )
+
+    config[args.region]["color"] = args.color
+    config[args.region]["level"] = args.level
+    config["mode"] = args.mode
+
+    dev = h.Device(
+        args.vendor_id,
+        args.product_id,
+        config=config
+    )
+
+
+if __name__ == '__main__':
+    args = parse_args()
+    main(args)

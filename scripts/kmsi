@@ -3,35 +3,45 @@
 
 import argparse as ag
 
+from os.path import abspath, dirname, exists, join
+from yaml import load, dump
 from kmsi import hid as h
 
 
-def parse_args():
+PREFIX = dirname(__file__)
+ACTUAL_FILE = abspath(
+    join(
+        PREFIX, "../share/kmsi/actual.yml"
+    )
+)
+CFG_FILE = abspath(
+    join(
+        PREFIX, "../share/kmsi/config.yaml"
+    )
+)
+
+
+def parse_args(default):
     parser = ag.ArgumentParser(
         formatter_class=ag.ArgumentDefaultsHelpFormatter,
     )
-    # parser.add_argument(
-        # "Directory",
-        # nargs='?',
-        # help="Répertoire contenant les images à mettre en fond d'écran."
-    # )
     parser.add_argument(
         "--vendor-id",
         type=int,
         help="Vendor id.",
-        default=6000
+        default=default["vendor"]
     )
     parser.add_argument(
         "--product-id",
         type=int,
         help="Product id",
-        default=65280
+        default=default["product"]
     )
     parser.add_argument(
         "--color",
         type=str,
         help="Color to use.",
-        default="red"
+        default=default["layout"]["left"]["color"]
     )
     parser.add_argument(
         "--region",
@@ -43,33 +53,25 @@ def parse_args():
         "--level",
         type=str,
         help="Intensity level.",
-        default='high'
+        default=default["layout"]["left"]["level"]
     )
     parser.add_argument(
         "--mode",
         type=str,
         help="Working mode for the keyboard.",
-        default='normal'
+        default=default["layout"]["mode"]
     )
 
     return parser.parse_args()
 
-def main(args):
-    config = dict(
-        mode="normal",
-        left=dict(
-            color="red",
-            level="high",
-        ),
-        middle=dict(
-            color="sky",
-            level="high",
-        ),
-        right=dict(
-            color="purple",
-            level="high",
-        )
-    )
+def main(args, default):
+    config = default["layout"]
+
+    if exists(ACTUAL_FILE):
+        with open(ACTUAL_FILE, "r") as f:
+            config.update(
+                load(f)
+            )
 
     config[args.region]["color"] = args.color
     config[args.region]["level"] = args.level
@@ -81,7 +83,15 @@ def main(args):
         config=config
     )
 
+    dev.update()
+
+    with open(ACTUAL_FILE, "w") as f:
+        dump(config, f)
+
 
 if __name__ == '__main__':
-    args = parse_args()
-    main(args)
+    with open(CFG_FILE, "r") as f:
+        default = load(f)
+
+    args = parse_args(default)
+    main(args, default)

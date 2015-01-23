@@ -4,7 +4,7 @@ This module, coming with a script, will illuminate your MSI keyboard, if support
 
 ## Dependancies
 
-- [cython-hidapi][https://github.com/trezor/cython-hidapi] (compatible python3 except for the try.py script)
+- [cython-hidapi](https://github.com/trezor/cython-hidapi) (compatible python3 except for the try.py script)
 - python 3.3 or above
 
 ## Build it from source

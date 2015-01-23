@@ -42,7 +42,7 @@ class Device(object):
         self.setMode(self._config["mode"])
 
     def sendRequest(self, req):
-        ret = self._device.send_feature_report(buf)
+        ret = self._device.send_feature_report(req)
         if ret == -1:
             raise e.SendError(self._device.error(), ret, self._config)
 

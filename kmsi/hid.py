@@ -135,3 +135,12 @@ class Device(object):
     def __del__(self):
         # closing properly the device:
         self._device.close()
+
+    @property
+    def config(self):
+        return self._config
+    @config.setter
+    def config(self, value):
+        self._config.update(value)
+        self.update()
+

@@ -1,0 +1,18 @@
+vendor: 6000
+product: 65280
+
+layout:
+        mode: normal
+
+        left:
+                color: red
+                level: high
+
+        middle:
+                color: sky
+                level: high
+
+        right:
+                color: purple
+                level: high
+

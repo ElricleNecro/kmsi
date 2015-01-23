@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+""".. module:: constants
+    Contains the most important constant of the module kmsi.
+"""
+
 REGIONS = dict(
     left=1,
     middle=2,

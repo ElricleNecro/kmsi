@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import hid
-
+from hid import device
 from . import constants as c
+from . import exception as e
 
 
 class Device(object):
@@ -11,8 +11,11 @@ class Device(object):
         self._vid = vendor_id
         self._pid = product_id
 
-        self._device = hid.device()
-        self._device.open(self._vid, self._pid)
+        self._device = device()
+        try:
+            self._device.open(self._vid, self._pid)
+        except IOError:
+            raise IOError("Unable to open device (%x, %x)" % (self._vid, self._pid))
 
         if config is not None:
             self._config = config
@@ -38,6 +41,11 @@ class Device(object):
         self.setColor("right", **self._config["right"])
         self.setMode(self._config["mode"])
 
+    def sendRequest(self, req):
+        ret = self._device.send_feature_report(buf)
+        if ret == -1:
+            raise e.SendError(self._device.error(), ret, self._config)
+
     def setColor(self, region, color, level="high"):
         self._config[region]["color"] = color
         self._config[region]["level"] = level
@@ -53,8 +61,7 @@ class Device(object):
         buf[6] = 0
         buf[7] = 236
 
-        if self._device.send_feature_report(buf) == -1:
-            raise ValueError(self._device.error())
+        self.sendRequest(buf)
 
     def setMode(self, mode):
         self._config["mode"] = mode
@@ -70,8 +77,7 @@ class Device(object):
         buf[6] = 0
         buf[7] = 236
 
-        if self._device.send_feature_report(buf) == -1:
-            raise ValueError(self._device.error())
+        self.sendRequest(buf)
 
     def __del__(self):
         self._device.close()

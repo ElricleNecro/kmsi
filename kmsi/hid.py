@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 
-""".. hid::
+""".. module:: hid
     This module contains the Device class. It allow users to modify keyboard
     mode and lightning.
 """
@@ -85,7 +85,7 @@ class Device(object):
             :type region: str
             :param color: color to use.
             :type color: str or int
-            :param level: Intensity level of the region ("low", "med", "high", "off").
+            :param level: Intensity level of the region ("low", "med", "high", "light").
             :type level: str
         """
         # Update the config dictionary:

@@ -22,13 +22,12 @@ setup(
     author      = 'Guillaume Plum',
     packages    = packages,
     cmdclass    = {'install_data': install_data},
-    # data_files  = [
-        # ('share/LibThese/animation-plugins', ["share/LibThese/animation-plugins/__init__.py"]), #glob.glob("share/LibThese/animation-plugins/*.py")),
-    # ],
-    # scripts = [
-        # 'scripts/animationv2.py',
-        # 'scripts/models_plot.py',
-    # ],
+    data_files  = [
+        ('share/kmsi', ["share/kmsi/config.yaml"]), #glob.glob("share/LibThese/animation-plugins/*.py")),
+    ],
+    scripts = [
+        'scripts/kmsi',
+    ],
 )
 
 #vim:spelllang=
